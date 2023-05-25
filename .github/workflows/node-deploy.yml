@@ -46,7 +46,7 @@ jobs:
           SOURCE: "deploy/"
           REMOTE_HOST: "ec2-18-218-200-221.us-east-2.compute.amazonaws.com"
           REMOTE_USER: ubuntu
-          TARGET: "/var/www/html/travel-backend"
+          TARGET: "nodeapps/travel-backend"
       - name: Execute SSH commmands on remote server
         uses: JimCronqvist/action-ssh@master
         env:
