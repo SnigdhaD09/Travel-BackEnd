@@ -14,15 +14,14 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.ingredient = require("./ingredient.model.js")(sequelize, Sequelize);
-db.recipe = require("./recipe.model.js")(sequelize, Sequelize);
-db.recipeStep = require("./recipeStep.model.js")(sequelize, Sequelize);
-db.recipeIngredient = require("./recipeIngredient.model.js")(
-  sequelize,
-  Sequelize
-);
 db.session = require("./session.model.js")(sequelize, Sequelize);
 db.user = require("./user.model.js")(sequelize, Sequelize);
+
+db.day = require("./day.model.js")(sequelize, Sequelize);
+db.hotel = require("./hotel.model.js")(sequelize, Sequelize);
+db.registration = require("./registration.model.js")(sequelize, Sequelize);
+db.site = require("./site.model.js")(sequelize, Sequelize);
+db.trip = require("./trip.model.js")(sequelize, Sequelize);
 
 // foreign key for session
 db.user.hasMany(
@@ -36,59 +35,73 @@ db.session.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-// foreign key for recipe
+// foreign key for trip
 db.user.hasMany(
-  db.recipe,
-  { as: "recipe" },
+  db.trip,
+  { as: "trips" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-db.recipe.belongsTo(
+db.trip.belongsTo(
   db.user,
   { as: "user" },
   { foreignKey: { allowNull: true }, onDelete: "CASCADE" }
 );
 
-// foreign key for recipeStep
-db.recipe.hasMany(
-  db.recipeStep,
-  { as: "recipeStep" },
+// foreign key for days
+db.trip.hasMany(
+  db.day,
+  { as: "days" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-db.recipeStep.belongsTo(
-  db.recipe,
-  { as: "recipe" },
+db.day.belongsTo(
+  db.trip,
+  { as: "trip" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-// foreign keys for recipeIngredient
-db.recipeStep.hasMany(
-  db.recipeIngredient,
-  { as: "recipeIngredient" },
+// foreign key for sites
+db.day.hasMany(
+  db.site,
+  { as: "sites" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-db.recipe.hasMany(
-  db.recipeIngredient,
-  { as: "recipeIngredient" },
+db.site.belongsTo(
+  db.day,
+  { as: "day" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-db.ingredient.hasMany(
-  db.recipeIngredient,
-  { as: "recipeIngredient" },
+
+// foreign key for hotels
+db.day.hasMany(
+  db.hotel,
+  { as: "hotels" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-db.recipeIngredient.belongsTo(
-  db.recipeStep,
-  { as: "recipeStep" },
-  { foreignKey: { allowNull: true }, onDelete: "CASCADE" }
-);
-db.recipeIngredient.belongsTo(
-  db.recipe,
-  { as: "recipe" },
+db.hotel.belongsTo(
+  db.day,
+  { as: "day" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-db.recipeIngredient.belongsTo(
-  db.ingredient,
-  { as: "ingredient" },
+
+// foreign keys for registrations
+db.trip.hasMany(
+  db.registration,
+  { as: "registrations" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.user.hasMany(
+  db.registration,
+  { as: "registrations" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.registration.belongsTo(
+  db.trip,
+  { as: "trip" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.registration.belongsTo(
+  db.user,
+  { as: "user" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 

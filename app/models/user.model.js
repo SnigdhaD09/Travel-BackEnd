@@ -14,6 +14,18 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    address: {
+      type: Sequelize.STRING(5000),
+      allowNull: false,
+    },
+    phoneNumber: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+    isAdmin: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+    },
     password: {
       type: Sequelize.BLOB,
       allowNull: false,
