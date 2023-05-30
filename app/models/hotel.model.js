@@ -21,7 +21,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
       },
       hotelImage: {
-        type: Sequelize.BLOB,
+        type: Sequelize.STRING( ),
         allowNull: false,
       },
       phoneNumber: {

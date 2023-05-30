@@ -14,6 +14,14 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    password: {
+      type: Sequelize.BLOB,
+      allowNull: false,
+    },
+    salt: {
+      type: Sequelize.BLOB,
+      allowNull: false,
+    },
     address: {
       type: Sequelize.STRING(5000),
       allowNull: false,
@@ -24,14 +32,6 @@ module.exports = (sequelize, Sequelize) => {
     },
     isAdmin: {
       type: Sequelize.BOOLEAN,
-      allowNull: false,
-    },
-    password: {
-      type: Sequelize.BLOB,
-      allowNull: false,
-    },
-    salt: {
-      type: Sequelize.BLOB,
       allowNull: false,
     },
   });

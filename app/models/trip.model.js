@@ -22,7 +22,8 @@ module.exports = (sequelize, Sequelize) => {
       },
       isArchived: {
         type: Sequelize.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
+        defaultValue: false,
       },
     });
   
