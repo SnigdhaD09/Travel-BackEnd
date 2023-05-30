@@ -1,50 +1,53 @@
 const db = require("../models");
 const Hotel = db.hotel;
-const RecipeStep = db.recipeStep;
-const RecipeIngredient = db.recipeIngredient;
-const Ingredient = db.ingredient;
-const Op = db.Sequelize.Op;
 // Create and Save a new Hotel
 exports.create = (req, res) => {
   // Validate request
-  if (req.body.name === undefined) {
-    const error = new Error("Name cannot be empty for hotel!");
-    error.statusCode = 400;
-    throw error;
+  if (req.body.hotelName === undefined) {
+    res.status(400).send({
+      message: `Name cannot be empty for hotel!`,
+    });
+    return;
   } else if (req.body.address === undefined) {
-    const error = new Error("Address cannot be empty for hotel!");
-    error.statusCode = 400;
-    throw error;
+    res.status(400).send({
+      message: `Address cannot be empty for hotel!`,
+    });
+    return;
   } else if (req.body.website === undefined) {
-    const error = new Error("Website cannot be empty for hotel!");
-    error.statusCode = 400;
-    throw error;
-  } else if (req.body.imagelink === undefined) {
-    const error = new Error("Image cannot be empty for hotel!");
-    error.statusCode = 400;
-    throw error;
+    res.status(400).send({
+      message: `Website cannot be empty for hotel!`,
+    });
+    return;
+  } else if (req.body.hotelImage === undefined) {
+    res.status(400).send({
+      message: `Image cannot be empty for hotel!`,
+    });
+    return;
   } else if (req.body.checkinDate === undefined) {
-    const error = new Error("Check In Date cannot be empty for hotel!");
-    error.statusCode = 400;
-    throw error;
-  } else if (req.body.checkOutDate === undefined) {
-    const error = new Error("Check Out Date cannot be empty for hotel!");
-    error.statusCode = 400;
-    throw error;
+    res.status(400).send({
+      message: `Check In Date cannot be empty for hotel!`,
+    });
+    return;
+  } else if (req.body.checkoutDate === undefined) {
+    res.status(400).send({
+      message: `Check Out Date cannot be empty for hotel!`,
+    });
+    return;
   } else if (req.body.phoneNumber === undefined) {
-    const error = new Error("Phone Number cannot be empty for hotel!");
-    error.statusCode = 400;
-    throw error;
+    res.status(400).send({
+      message: `Phone Number cannot be empty for hotel!`,
+    });
+    return;
   }
 
   // Create a Hotel
   const hotel = {
-    name: req.body.name,
+    hotelName: req.body.hotelName,
     address: req.body.address,
     website: req.body.website,
-    imagelink: req.body.imagelink,
+    hotelImage: req.body.hotelImage,
     checkinDate: req.body.checkinDate,
-    checkOutDate: req.body.checkOutDate,
+    checkoutDate: req.body.checkoutDate,
     phoneNumber: req.body.phoneNumber,
   };
   // Save Hotel in the database
@@ -65,7 +68,7 @@ exports.findAll = (req, res) => {
   const userId = req.params.userId;
   Hotel.findAll({
     order: [
-      ["name", "ASC"],
+      ["hotelName", "ASC"],
     ],
   })
     .then((data) => {
@@ -111,7 +114,6 @@ exports.findOne = (req, res) => {
         ],
       },
     ],
-    order: [[RecipeStep, "stepNumber", "ASC"]],
   })
     .then((data) => {
       if (data) {

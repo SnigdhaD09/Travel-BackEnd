@@ -13,22 +13,27 @@ exports.create = (req, res) => {
     res.status(400).send({
       message: `Title cannot be empty for trip!`,
     });
+    return;
   } else if (req.body.startdate === undefined) {
     res.status(400).send({
       message: `Start Date cannot be empty for trip!`,
     });
+    return;
   } else if (req.body.enddate === undefined) {
     res.status(400).send({
       message: `End Date cannot be empty for trip!`,
     });
+    return;
   } else if (req.body.tripDescription === undefined) {
     res.status(400).send({
       message: `Description cannot be empty for trip!`,
     });
+    return;
   } else if (req.body.tripDestination === undefined) {
     res.status(400).send({
       message: `Destination cannot be empty for trip!`,
     });
+    return;
   } else if (req.body.isArchived === undefined) {
     req.body.isArchived = false;
   } 
