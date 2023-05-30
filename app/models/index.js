@@ -59,11 +59,6 @@ db.day.belongsTo(
   { as: "trip" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-db.hotel.belongsTo(
-  db.day,
-  { as: "day" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
 
 // foreign key for sites
 db.day.hasMany(
@@ -75,6 +70,13 @@ db.site.belongsTo(
   db.day,
   { as: "day" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+// foreign keys for hotels
+db.day.belongsTo(
+  db.hotel,
+  { as: "hotel" },
+  { foreignKey: { allowNull: false } }
 );
 
 // foreign keys for registrations
