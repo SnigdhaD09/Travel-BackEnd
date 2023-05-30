@@ -1,74 +1,50 @@
 const db = require("../models");
-const Hotel = db.hotel;
-// Create and Save a new Hotel
+const Day = db.day;
+// Create and Save a new Day
 exports.create = (req, res) => {
   // Validate request
-  if (req.body.hotelName === undefined) {
+  if (req.body.tripDate === undefined) {
     res.status(400).send({
-      message: `Name cannot be empty for hotel!`,
+      message: `Trip Date cannot be empty for day!`,
     });
     return;
-  } else if (req.body.address === undefined) {
+  } else if (req.body.tripId === undefined) {
     res.status(400).send({
-      message: `Address cannot be empty for hotel!`,
+      message: `Trip Id cannot be empty for day!`,
     });
     return;
-  } else if (req.body.website === undefined) {
+  } else if (req.body.hotelId === undefined) {
     res.status(400).send({
-      message: `Website cannot be empty for hotel!`,
+      message: `Hotel Id cannot be empty for day!`,
     });
     return;
-  } else if (req.body.hotelImage === undefined) {
-    res.status(400).send({
-      message: `Image cannot be empty for hotel!`,
-    });
-    return;
-  } else if (req.body.checkinDate === undefined) {
-    res.status(400).send({
-      message: `Check In Date cannot be empty for hotel!`,
-    });
-    return;
-  } else if (req.body.checkoutDate === undefined) {
-    res.status(400).send({
-      message: `Check Out Date cannot be empty for hotel!`,
-    });
-    return;
-  } else if (req.body.phoneNumber === undefined) {
-    res.status(400).send({
-      message: `Phone Number cannot be empty for hotel!`,
-    });
-    return;
-  }
+  } 
 
-  // Create a Hotel
-  const hotel = {
-    hotelName: req.body.hotelName,
-    address: req.body.address,
-    website: req.body.website,
-    hotelImage: req.body.hotelImage,
-    checkinDate: req.body.checkinDate,
-    checkoutDate: req.body.checkoutDate,
-    phoneNumber: req.body.phoneNumber,
+  // Create a Day
+  const day = {
+    tripDate: req.body.tripDate,
+    tripId: req.body.tripId,
+    hotelId: req.body.hotelId,
   };
-  // Save Hotel in the database
-  Hotel.create(hotel)
+  // Save Day in the database
+  Day.create(day)
     .then((data) => {
       res.send(data);
     })
     .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Hotel.",
+          err.message || "Some error occurred while creating the Day.",
       });
     });
 };
 
-// Find all Hotels
+// Find all Days
 exports.findAll = (req, res) => {
   const userId = req.params.userId;
-  Hotel.findAll({
+  Day.findAll({
     order: [
-      ["hotelName", "ASC"],
+      ["tripDate", "ASC"],
     ],
   })
     .then((data) => {
@@ -76,22 +52,22 @@ exports.findAll = (req, res) => {
         res.send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find Hotels.`,
+          message: `Cannot find Days.`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Error retrieving Hotels.",
+          err.message || "Error retrieving Days.",
       });
     });
 };
 
-// Find a single Hotel with an id
+// Find a single Day with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
-  Hotel.findOne({
+  Day.findOne({
     where: { id: id },
     include: [
       {
@@ -120,75 +96,75 @@ exports.findOne = (req, res) => {
         res.send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find Hotel with id=${id}.`,
+          message: `Cannot find Day with id=${id}.`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: err.message || "Error retrieving Hotel with id=" + id,
+        message: err.message || "Error retrieving Day with id=" + id,
       });
     });
 };
-// Update a Hotel by the id in the request
+// Update a Day by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
-  Hotel.update(req.body, {
+  Day.update(req.body, {
     where: { id: id },
   })
     .then((number) => {
       if (number == 1) {
         res.send({
-          message: "Hotel was updated successfully.",
+          message: "Day was updated successfully.",
         });
       } else {
         res.send({
-          message: `Cannot update Hotel with id=${id}. Maybe Hotel was not found or req.body is empty!`,
+          message: `Cannot update Day with id=${id}. Maybe Day was not found or req.body is empty!`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: err.message || "Error updating Hotel with id=" + id,
+        message: err.message || "Error updating Day with id=" + id,
       });
     });
 };
-// Delete a Hotel with the specified id in the request
+// Delete a Day with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
-  Hotel.destroy({
+  Day.destroy({
     where: { id: id },
   })
     .then((number) => {
       if (number == 1) {
         res.send({
-          message: "Hotel was deleted successfully!",
+          message: "Day was deleted successfully!",
         });
       } else {
         res.send({
-          message: `Cannot delete Hotel with id=${id}. Maybe Hotel was not found!`,
+          message: `Cannot delete Day with id=${id}. Maybe Day was not found!`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: err.message || "Could not delete Hotel with id=" + id,
+        message: err.message || "Could not delete Day with id=" + id,
       });
     });
 };
-// Delete all Hotels from the database.
+// Delete all Days from the database.
 exports.deleteAll = (req, res) => {
-  Hotel.destroy({
+  Day.destroy({
     where: {},
     truncate: false,
   })
     .then((number) => {
-      res.send({ message: `${number} Hotels were deleted successfully!` });
+      res.send({ message: `${number} Days were deleted successfully!` });
     })
     .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all hotels.",
+          err.message || "Some error occurred while removing all days.",
       });
     });
 };
