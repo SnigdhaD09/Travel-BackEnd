@@ -10,25 +10,25 @@ const Op = db.Sequelize.Op;
 exports.create = (req, res) => {
   // Validate request
   if (req.body.tripTitle === undefined) {
-    const error = new Error("Title cannot be empty for trip!");
-    error.statusCode = 400;
-    throw error;
+    res.status(400).send({
+      message: `Title cannot be empty for trip!`,
+    });
   } else if (req.body.startdate === undefined) {
-    const error = new Error("Start Date cannot be empty for trip!");
-    error.statusCode = 400;
-    throw error;
+    res.status(400).send({
+      message: `Start Date cannot be empty for trip!`,
+    });
   } else if (req.body.enddate === undefined) {
-    const error = new Error("End Date cannot be empty for trip!");
-    error.statusCode = 400;
-    throw error;
+    res.status(400).send({
+      message: `End Date cannot be empty for trip!`,
+    });
   } else if (req.body.tripDescription === undefined) {
-    const error = new Error("Description cannot be empty for trip!");
-    error.statusCode = 400;
-    throw error;
+    res.status(400).send({
+      message: `Description cannot be empty for trip!`,
+    });
   } else if (req.body.tripDestination === undefined) {
-    const error = new Error("Destination cannot be empty for trip!");
-    error.statusCode = 400;
-    throw error;
+    res.status(400).send({
+      message: `Destination cannot be empty for trip!`,
+    });
   } else if (req.body.isArchived === undefined) {
     req.body.isArchived = false;
   } 
@@ -127,18 +127,16 @@ exports.findAllRegisteredTrips = (req, res) => {
                 model: Hotel,
                 as: "hotel",
                 required: false,
+              },
+              {
+                model: DaySite,
+                as: "daysite",
+                required: false,
                 include: [
                   {
-                    model: DaySite,
-                    as: "daysite",
+                    model: Site,
+                    as: "site",
                     required: false,
-                    include: [
-                      {
-                        model: Site,
-                        as: "site",
-                        required: false,
-                      },
-                    ],
                   },
                 ],
               },

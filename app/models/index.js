@@ -39,7 +39,7 @@ db.session.belongsTo(
 // foreign key for trip
 db.user.hasMany(
   db.trip,
-  { as: "trips" },
+  { as: "trip" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 db.trip.belongsTo(
@@ -51,7 +51,7 @@ db.trip.belongsTo(
 // foreign key for days
 db.trip.hasMany(
   db.day,
-  { as: "days" },
+  { as: "day" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 db.day.belongsTo(
@@ -63,7 +63,7 @@ db.day.belongsTo(
 // foreign key for sites
 db.day.hasMany(
   db.site,
-  { as: "sites" },
+  { as: "site" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 db.site.belongsTo(
@@ -82,12 +82,12 @@ db.day.belongsTo(
 // foreign keys for registrations
 db.trip.hasMany(
   db.registration,
-  { as: "registrations" },
+  { as: "registration" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 db.user.hasMany(
   db.registration,
-  { as: "registrations" },
+  { as: "registration" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 db.registration.belongsTo(
@@ -104,12 +104,12 @@ db.registration.belongsTo(
 // foreign keys for daysites
 db.day.hasMany(
   db.daysite,
-  { as: "daysites" },
+  { as: "daysite" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 db.site.hasMany(
   db.daysite,
-  { as: "daysites" },
+  { as: "daysite" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 db.daysite.belongsTo(

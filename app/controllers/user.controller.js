@@ -8,21 +8,31 @@ const { encrypt, getSalt, hashPassword } = require("../authentication/crypto");
 exports.create = async (req, res) => {
   // Validate request
   if (req.body.firstName === undefined) {
-    const error = new Error("First name cannot be empty for user!");
-    error.statusCode = 400;
-    throw error;
+    res.status(400).send({
+      message: `First name cannot be empty for user!`,
+    });
   } else if (req.body.lastName === undefined) {
-    const error = new Error("Last name cannot be empty for user!");
-    error.statusCode = 400;
-    throw error;
+    res.status(400).send({
+      message: `Last name cannot be empty for user!`,
+    });
   } else if (req.body.email === undefined) {
-    const error = new Error("Email cannot be empty for user!");
-    error.statusCode = 400;
-    throw error;
+    res.status(400).send({
+      message: `Email cannot be empty for user!`,
+    });
   } else if (req.body.password === undefined) {
-    const error = new Error("Password cannot be empty for user!");
-    error.statusCode = 400;
-    throw error;
+    res.status(400).send({
+      message: `Password cannot be empty for user!`,
+    });
+  }else if (req.body.address === undefined) {
+    res.status(400).send({
+      message: `Address cannot be empty for user!`,
+    });
+  }else if (req.body.phoneNumber === undefined) {
+    res.status(400).send({
+      message: `Phone Number cannot be empty for user!`,
+    });
+  }else if (req.body.isAdmin === undefined) {
+    req.body.isAdmin = false;
   }
 
   // find by email
@@ -48,6 +58,9 @@ exports.create = async (req, res) => {
           email: req.body.email,
           password: hash,
           salt: salt,
+          address: req.body.address,
+          phoneNumber: req.body.phoneNumber,
+          isAdmin: req.body.isAdmin,
         };
 
         // Save User in the database
