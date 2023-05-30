@@ -19,6 +19,9 @@ module.exports = (app) => {
   // Retrieve a single Trip with id
   router.get("/trips/:id", Trip.findOne);
 
+  // Retrieve a single Trip with id
+  router.get("/trips", Trip.findAll);
+
   // Update a Trip with id
   router.put("/trips/:id", [authenticateRoute], Trip.update);
 
