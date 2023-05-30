@@ -73,18 +73,16 @@ exports.findAll = (req, res) => {
             model: Hotel,
             as: "hotel",
             required: false,
+          },
+          {
+            model: DaySite,
+            as: "daysite",
+            required: false,
             include: [
               {
-                model: DaySite,
-                as: "daysite",
+                model: Site,
+                as: "site",
                 required: false,
-                include: [
-                  {
-                    model: Site,
-                    as: "site",
-                    required: false,
-                  },
-                ],
               },
             ],
           },
@@ -172,7 +170,8 @@ exports.findAllRegisteredTrips = (req, res) => {
 
 // Find a single Trip with an id
 exports.findOne = (req, res) => {
-  const id = req.params.id;
+  const id = req.params.tripId;
+  console.log(req.params);
   Trip.findOne({
     where: { id: id },
     include: [
@@ -185,18 +184,16 @@ exports.findOne = (req, res) => {
             model: Hotel,
             as: "hotel",
             required: false,
+          },
+          {
+            model: DaySite,
+            as: "daysite",
+            required: false,
             include: [
               {
-                model: DaySite,
-                as: "daysite",
+                model: Site,
+                as: "site",
                 required: false,
-                include: [
-                  {
-                    model: Site,
-                    as: "site",
-                    required: false,
-                  },
-                ],
               },
             ],
           },
