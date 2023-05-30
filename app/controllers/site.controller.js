@@ -5,25 +5,25 @@ const Op = db.Sequelize.Op;
 exports.create = (req, res) => {
   // Validate request
   if (req.body.siteName === undefined) {
-    const error = new Error("Site name cannot be empty for site!");
-    error.statusCode = 400;
-    throw error;
+    res.status(404).send({
+        message: `Site name cannot be empty for site!`,
+      });return;
   } else if (req.body.siteDescription === undefined) {
-    const error = new Error("Description cannot be empty for site!");
-    error.statusCode = 400;
-    throw error;
+    res.status(404).send({
+        message: `Description cannot be empty for site!`,
+      });return;
   } else if (req.body.state === undefined) {
-    const error = new Error("State cannot be empty for site!");
-    error.statusCode = 400;
-    throw error;
+    res.status(404).send({
+        message: `State cannot be empty for site!`,
+      });return;
   } else if (req.body.city === undefined) {
-    const error = new Error("City be empty for site!");
-    error.statusCode = 400;
-    throw error;
+    res.status(404).send({
+        message: `City be empty for site!`,
+      });return;
   } else if (req.body.siteImage === undefined) {
-    const error = new Error("Site Image cannot be empty for site!");
-    error.statusCode = 400;
-    throw error;
+    res.status(404).send({
+        message: `Site Image cannot be empty for site!`,
+      });return;
   }
 
   // Create a Site
