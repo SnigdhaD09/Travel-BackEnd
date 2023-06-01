@@ -1,5 +1,6 @@
 const db = require("../models");
 const Day = db.day;
+const Hotel = db.hotel;
 // Create and Save a new Day
 exports.create = (req, res) => {
   // Validate request
@@ -23,7 +24,7 @@ exports.create = (req, res) => {
   // Create a Day
   const day = {
     tripDate: req.body.tripDate,
-    tripId: req.body.tripId,
+    tripId: req.params.tripId,
     hotelId: req.body.hotelId,
   };
   // Save Day in the database
@@ -39,57 +40,38 @@ exports.create = (req, res) => {
     });
 };
 
-// Find all Days
-exports.findAll = (req, res) => {
-  const userId = req.params.userId;
+exports.findAllDaysForTrip = (req, res) => {
+  const tripId = req.params.tripId;
   Day.findAll({
-    order: [
-      ["tripDate", "ASC"],
+    where: { tripId: tripId },
+    include: [
+      {
+        model: Hotel,
+        as: "hotel",
+        required: false,
+      }
     ],
+    order: [["tripDate", "ASC"]],
   })
     .then((data) => {
-      if (data) {
-        res.send(data);
-      } else {
-        res.status(404).send({
-          message: `Cannot find Days.`,
-        });
-      }
+      res.send(data);
     })
     .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Error retrieving Days.",
+          err.message ||
+          "Some error occurred while retrieving days for a trip.",
       });
     });
 };
 
+
 // Find a single Day with an id
 exports.findOne = (req, res) => {
+  const tripId = req.params.tripId;
   const id = req.params.id;
   Day.findOne({
-    where: { id: id },
-    include: [
-      {
-        model: RecipeStep,
-        as: "recipeStep",
-        required: false,
-        include: [
-          {
-            model: RecipeIngredient,
-            as: "recipeIngredient",
-            required: false,
-            include: [
-              {
-                model: Ingredient,
-                as: "ingredient",
-                required: false,
-              },
-            ],
-          },
-        ],
-      },
-    ],
+    where: { id: id , tripId: tripId},
   })
     .then((data) => {
       if (data) {
@@ -108,9 +90,10 @@ exports.findOne = (req, res) => {
 };
 // Update a Day by the id in the request
 exports.update = (req, res) => {
+  const tripId = req.params.tripId;
   const id = req.params.id;
   Day.update(req.body, {
-    where: { id: id },
+    where: { id: id , tripId: tripId },
   })
     .then((number) => {
       if (number == 1) {
@@ -131,9 +114,10 @@ exports.update = (req, res) => {
 };
 // Delete a Day with the specified id in the request
 exports.delete = (req, res) => {
+  const tripId = req.params.tripId;
   const id = req.params.id;
   Day.destroy({
-    where: { id: id },
+    where: { id: id , tripId: tripId },
   })
     .then((number) => {
       if (number == 1) {
@@ -154,8 +138,9 @@ exports.delete = (req, res) => {
 };
 // Delete all Days from the database.
 exports.deleteAll = (req, res) => {
+  const tripId = req.params.tripId;
   Day.destroy({
-    where: {},
+    where: { id: id , tripId: tripId },
     truncate: false,
   })
     .then((number) => {
@@ -164,7 +149,7 @@ exports.deleteAll = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all days.",
+          err.message || "Some error occurred while removing all days for the trip.",
       });
     });
 };

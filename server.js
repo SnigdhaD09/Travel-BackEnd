@@ -32,6 +32,7 @@ require("./app/routes/ingredient.routes")(app);
 require("./app/routes/hotel.routes")(app);
 require("./app/routes/site.routes")(app);
 require("./app/routes/trip.routes")(app);
+require("./app/routes/day.routes")(app);
 require("./app/routes/recipeStep.routes")(app);
 require("./app/routes/recipeIngredient.routes")(app);
 require("./app/routes/user.routes")(app);
