@@ -93,27 +93,6 @@ exports.findOne = (req, res) => {
   const id = req.params.id;
   Hotel.findOne({
     where: { id: id },
-    include: [
-      {
-        model: RecipeStep,
-        as: "recipeStep",
-        required: false,
-        include: [
-          {
-            model: RecipeIngredient,
-            as: "recipeIngredient",
-            required: false,
-            include: [
-              {
-                model: Ingredient,
-                as: "ingredient",
-                required: false,
-              },
-            ],
-          },
-        ],
-      },
-    ],
   })
     .then((data) => {
       if (data) {
