@@ -60,6 +60,73 @@ exports.create = (req, res) => {
     });
 };
 
+// Register for a Trip
+exports.register = (req, res) => {
+  // Validate request
+  if (req.body.tripId === undefined) {
+    res.status(400).send({
+      message: `Trip Id cannot be empty!`,
+    });
+    return;
+  } else if (req.body.userId === undefined) {
+    res.status(400).send({
+      message: `User cannot be empty!`,
+    });
+    return;
+  } 
+
+  // Create a registration
+  const registration = {
+    tripId: req.body.tripId,
+    userId: req.body.userId,
+  };
+  // Save registration in the database
+  Registration.create(registration)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while registering for the Trip.",
+      });
+    });
+};
+
+// Unregister from a Trip
+exports.unregister = (req, res) => {
+  // Validate request
+  if (req.body.tripId === undefined) {
+    res.status(400).send({
+      message: `Trip Id cannot be empty!`,
+    });
+    return;
+  } else if (req.body.userId === undefined) {
+    res.status(400).send({
+      message: `User cannot be empty!`,
+    });
+    return;
+  }
+
+  const tripId = req.body.tripId;
+  const userId = req.body.userId;
+  // Delete registration in the database
+  Registration.destroy({
+    where: {userId: userId, tripId: tripId}
+  })
+    .then((number) => {
+      res.send({
+        message: "Trip was unregistered successfully!",
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while unregistering from the Trip.",
+      });
+    });
+};
+
 // Find all Trips
 exports.findAll = (req, res) => {
   Trip.findAll({

@@ -6,6 +6,12 @@ module.exports = (app) => {
   // Create a new Trip
   router.post("/trips/", [authenticateRoute], Trip.create);
 
+  // Register for a Trip
+  router.post("/trips/register", [authenticateRoute], Trip.register);
+
+  // Unregister from a Trip
+  router.post("/trips/unregister", [authenticateRoute], Trip.unregister);
+
   // Retrieve Trip by tripId
   router.get(
     "/trips/:tripId",
