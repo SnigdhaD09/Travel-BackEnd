@@ -6,6 +6,15 @@ module.exports = (app) => {
   // Create a new Trip
   router.post("/trips/", [authenticateRoute], Trip.create);
 
+  // Check if Trip is Favorite
+  router.get("/trips/favorite/:userId/:tripId", Trip.checkFavorite);
+
+  // Mark a Trip as Favorite
+  router.post("/trips/favorite", [authenticateRoute], Trip.favorite);
+
+  // Mark a Trip as Not Favorite
+  router.post("/trips/notfavorite", [authenticateRoute], Trip.notFavorite);
+
   // Register for a Trip
   router.post("/trips/register", [authenticateRoute], Trip.register);
 
