@@ -60,6 +60,95 @@ exports.create = (req, res) => {
     });
 };
 
+function copyTripActual(req, res, id, newId){
+  var tripCounter = 0;
+  var dayCounter = 0;
+  var daySiteCounter = 0;
+  var trip = {};
+  Trip.findOne({
+    where: { id: id },
+    include: [
+      {
+        model: Day,
+        as: "day",
+        required: false,
+        include: [
+          {
+            model: Hotel,
+            as: "hotel",
+            required: false,
+          },
+          {
+            model: DaySite,
+            as: "daysite",
+            required: false,
+            include: [
+              {
+                model: Site,
+                as: "site",
+                required: false,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  })
+    .then((data) => {
+      if (data) {
+        trip = data.dataValues;
+        trip.id = undefined;
+        Trip.create(trip)
+          .then((tripData) => {
+            trip.id = tripData.dataValues.id;
+            var newTripId = trip.id;
+            newId.id = newTripId;
+            for(let i=0; i< trip.day.length; i++){
+              let tripDay = trip.day[i].dataValues;
+              tripDay.id = undefined;
+              tripDay.tripId = newTripId;
+              Day.create(tripDay)
+              .then((dayData)=> {
+                var dayId = dayData.dataValues.id;
+                for(let j = 0; j< trip.day[i].daysite.length; j++){
+                  let daySite = trip.day[i].daysite[j].dataValues;
+                  daySite.dayId = dayId;
+                  daySite.id = undefined;
+                  DaySite.create(daySite)
+                    .then((daySiteData)=> {
+                    }) 
+                }
+              }) 
+            }
+            tripCounter++;
+            if(tripCounter == 1 && dayCounter == 0 && dayCounter == 0){
+              res.send({
+                id: newTripId,
+                message: "Copied Trip!",
+              });
+            }
+            return newTripId;
+          })
+      } else {
+        res.status(404).send({
+          message: `Cannot find Trip with id=${id}.`,
+        });
+      }
+    });
+}
+
+exports.copyTrip = (req, res) => {
+  var id = req.params.id;
+  if (id === undefined) {
+    res.status(400).send({
+      message: `Trip Id cannot be empty!`,
+    });
+    return;
+  }
+  var newId = {};
+  copyTripActual(req, res, id, newId);  
+};
+
 // Register for a Trip
 exports.register = (req, res) => {
   // Validate request
