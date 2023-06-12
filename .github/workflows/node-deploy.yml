@@ -39,8 +39,8 @@ jobs:
           echo SECRET_KEY = "$SECRET_KEY" >> .env
           echo CLIENT_ID = "$CLIENT_ID" >> .env
           echo CLIENT_SECRET = "$CLIENT_SECRET" >> .env
-          echo SENDGRID_API_KEY = "$SENDGRID_API_KEY'" > .env
-          echo FRONTEND_URL = "$FRONTEND_URL'" > .env
+          echo SENDGRID_API_KEY = "$SENDGRID_API_KEY" >> .env
+          echo FRONTEND_URL = "$FRONTEND_URL" >> .env
 
       - run: npm run bundle
 
