@@ -21,6 +21,7 @@ db.day = require("./day.model.js")(sequelize, Sequelize);
 db.daysite = require("./daysite.model.js")(sequelize, Sequelize);
 db.hotel = require("./hotel.model.js")(sequelize, Sequelize);
 db.registration = require("./registration.model.js")(sequelize, Sequelize);
+db.favorite = require("./favorite.model.js")(sequelize, Sequelize);
 db.site = require("./site.model.js")(sequelize, Sequelize);
 db.trip = require("./trip.model.js")(sequelize, Sequelize);
 
@@ -96,6 +97,27 @@ db.registration.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 db.registration.belongsTo(
+  db.user,
+  { as: "user" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+// foreign keys for favorites
+db.trip.hasMany(
+  db.favorite,
+  { as: "favorite" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.user.hasMany(
+  db.favorite,
+  { as: "favorite" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.favorite.belongsTo(
+  db.trip,
+  { as: "trip" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.favorite.belongsTo(
   db.user,
   { as: "user" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }

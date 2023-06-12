@@ -2,6 +2,7 @@ const db = require("../models");
 const EmailController = require("./email.controller.js");
 const Trip = db.trip;
 const Registration = db.registration;
+const Favorite = db.favorite;
 const User = db.user;
 const Day = db.day;
 const Site = db.site;
@@ -224,6 +225,99 @@ The Trip System<br>
       }
     });
 };
+
+// Mark a Trip as Favorite
+exports.favorite = (req, res) => {
+  // Validate request
+  if (req.body.tripId === undefined) {
+    res.status(400).send({
+      message: `Trip Id cannot be empty!`,
+    });
+    return;
+  } else if (req.body.userId === undefined) {
+    res.status(400).send({
+      message: `User cannot be empty!`,
+    });
+    return;
+  } 
+
+  // Create a favorite
+  const favorite = {
+    tripId: req.body.tripId,
+    userId: req.body.userId,
+  };
+  // Save favorite in the database
+  Favorite.create(favorite)
+    .then((data) => {
+      res.send({
+        message: "Trip was marked favorite successfully!",
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while marking the trip as favorite.",
+      });
+    });
+};
+
+// Mark a Trip as Not Favorite
+exports.notFavorite = (req, res) => {
+  // Validate request
+  if (req.body.tripId === undefined) {
+    res.status(400).send({
+      message: `Trip Id cannot be empty!`,
+    });
+    return;
+  } else if (req.body.userId === undefined) {
+    res.status(400).send({
+      message: `User cannot be empty!`,
+    });
+    return;
+  }
+
+  const tripId = req.body.tripId;
+  const userId = req.body.userId;
+  // Delete favorite in the database
+  Favorite.destroy({
+    where: {userId: userId, tripId: tripId}
+  })
+    .then((number) => {
+      res.send({
+        message: "Trip was marked not favorite successfully!",
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while marking trip as not favorite.",
+      });
+    });
+};
+
+// Check if a Trip is Favorite
+exports.checkFavorite = (req, res) => {
+  // Validate request
+  const tripId = req.params.tripId;
+  const userId = req.params.userId;
+  Favorite.findOne({
+    where: { tripId: tripId, userId: userId },
+  })
+    .then((data) => {
+      var result = false;
+      console.log(data);
+      if(data !== null){
+        result = true;
+      }
+      res.send(result);      
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Error retrieving Trip with id=" + tripId,
+      });
+    });
+};
+
 
 // Register for a Trip
 exports.register = (req, res) => {
