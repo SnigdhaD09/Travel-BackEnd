@@ -25,6 +25,9 @@ module.exports = (app) => {
   // Retrieve a single Trip with id
   router.get("/trips/:id", Trip.findOne);
 
+  // Share a Trip with id
+  router.post("/trips/:id/share", Trip.shareTrip);
+
   // Copies a Trip with id
   router.get("/trips/:id/copy", Trip.copyTrip);
 

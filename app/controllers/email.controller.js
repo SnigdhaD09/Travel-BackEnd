@@ -8,26 +8,9 @@ exports.triggerSend = (to, sub, body) => {
         subject: sub,
         html: body,
     };
-    console.log(msg);
     sgMail.send(msg)
     .then(() => {
-        console.log('Email sent')
-    })
-    .catch((error) => {
-        console.error(error)
-    });
-}
-
-exports.triggerSendPersonalized = (personalizations, body) => {
-    const msg = {
-        personalizations: personalizations,
-        from: 'vinod.modukuri@eagles.oc.edu',
-        html: body,
-    };
-    console.log(msg);
-    sgMail.send(msg)
-    .then(() => {
-        console.log('Email sent')
+        console.log('Email sent to ' + to)
     })
     .catch((error) => {
         console.error(error)

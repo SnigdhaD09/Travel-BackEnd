@@ -151,6 +151,80 @@ exports.copyTrip = (req, res) => {
   copyTripActual(req, res, id, newId);  
 };
 
+exports.shareTrip = (req, res) => {
+  var id = req.params.id;
+  if (id === undefined) {
+    res.status(400).send({
+      message: `Trip Id cannot be empty!`,
+    });
+    return;
+  }
+  var to = req.body.email;
+  Trip.findOne({
+    where: { id: id },
+    include: [
+      {
+        model: Day,
+        as: "day",
+        required: false,
+        include: [
+          {
+            model: Hotel,
+            as: "hotel",
+            required: false,
+          },
+          {
+            model: DaySite,
+            as: "daysite",
+            required: false,
+            include: [
+              {
+                model: Site,
+                as: "site",
+                required: false,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  })
+    .then((data) => {
+      if (data) {
+        var trip = data.dataValues;
+        var sub = "Sharing a Trip";
+        var body = `
+Hi there,
+<br>
+A friend has shared this trip with you. Here's the details:
+<br><br>
+<table style="padding:25px">
+<tbody>
+<tr><td>Trip Name:</td><td>${trip.tripTitle}</td></tr>
+<tr><td>Start Date:</td><td>${new Date(trip.startdate).toLocaleDateString()}</td></tr>
+<tr><td>End Date:</td><td>${new Date(trip.enddate).toLocaleDateString()}</td></tr>
+<tr><td>Trip Desription:</td><td>${trip.tripDescription}</td></tr>
+<tr><td>Trip Destination:</td><td>${trip.tripDestination}</td></tr>
+</tbody></table>
+<br><br>
+Please <a href="${process.env.FRONTEND_URL}">visit us</a> to learn more.
+<br><br>
+Best,<br>
+The Trip System<br>
+        `;
+
+        EmailController.triggerSend(to, sub, body);
+        res.send({
+          message: "Shared Trip with " + to,
+        });
+      } else {
+        res.status(404).send({
+          message: `Cannot find Trip with id=${id}.`,
+        });
+      }
+    });
+};
+
 // Register for a Trip
 exports.register = (req, res) => {
   // Validate request
