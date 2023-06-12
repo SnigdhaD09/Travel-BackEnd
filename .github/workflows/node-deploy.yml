@@ -18,6 +18,8 @@ jobs:
       SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
       CLIENT_ID: ${{secrets.CLIENT_ID}}
       CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+      SENDGRID_API_KEY: ${{secrets.SENDGRID_API_KEY}}
+      FRONTEND_URL: "http://ec2-3-137-88-25.us-east-2.compute.amazonaws.com/travel-frontend"
     steps:
       - uses: actions/checkout@v2
         with:
@@ -37,6 +39,8 @@ jobs:
           echo SECRET_KEY = "$SECRET_KEY" >> .env
           echo CLIENT_ID = "$CLIENT_ID" >> .env
           echo CLIENT_SECRET = "$CLIENT_SECRET" >> .env
+          echo SENDGRID_API_KEY = "$SENDGRID_API_KEY'" > .env
+          echo FRONTEND_URL = "$FRONTEND_URL'" > .env
 
       - run: npm run bundle
 

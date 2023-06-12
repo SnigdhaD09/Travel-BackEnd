@@ -1,6 +1,8 @@
 const db = require("../models");
+const EmailController = require("./email.controller.js");
 const Trip = db.trip;
 const Registration = db.registration;
+const User = db.user;
 const Day = db.day;
 const Site = db.site;
 const Hotel = db.hotel;
@@ -327,7 +329,6 @@ exports.findAllRegisteredTrips = (req, res) => {
 // Find a single Trip with an id
 exports.findOne = (req, res) => {
   const id = req.params.tripId;
-  console.log(req.params);
   Trip.findOne({
     where: { id: id },
     include: [
@@ -380,6 +381,54 @@ exports.update = (req, res) => {
   })
     .then((number) => {
       if (number == 1) {
+        console.log("Sending email -------------------------------------");
+        Registration.findAll({
+          where: { tripId: id },
+          include: [
+            {
+              model: User,
+              as: "user",
+              required: false,
+            }
+          ]
+        }).then((data)=> {
+          var registrations = data.map(r => {return r.dataValues});
+          var users = registrations.map(r=> {return r.user});
+          // var userEmails = users.map(u => {return {"email": u.email}});
+          // userEmails[1] = {"email": "vinod.modukuri@eagles.oc.edu"};
+          var userEmails = users.map(u => {return u.email});
+
+          var sub = "Trip System Update";
+          var body = `
+Hi there,
+<br>
+A trip you have registered for has been updated. Here's the new details:
+<br><br>
+<table style="padding:25px">
+<tbody>
+<tr><td>Trip Name:</td><td>${req.body.tripTitle}</td></tr>
+<tr><td>Start Date:</td><td>${req.body.startdate}</td></tr>
+<tr><td>End Date:</td><td>${req.body.enddate}</td></tr>
+<tr><td>Trip Desription:</td><td>${req.body.tripDescription}</td></tr>
+<tr><td>Trip Destination:</td><td>${req.body.tripDestination}</td></tr>
+<tr><td>Archived:</td><td>${req.body.isArchived ? "Yes": "No"}</td></tr>
+</tbody></table>
+<br><br>
+Please <a href="${process.env.FRONTEND_URL}">visit us</a> to learn more.
+<br><br>
+Best,<br>
+The Trip System<br>
+          `;
+          console.log(userEmails);
+          // var personalizationsArray = [{"to": userEmails, "subject": sub}];
+          // var personalizations = personalizationsArray;
+          // console.log(personalizations);
+          // EmailController.triggerSendPersonalized(personalizations, body);
+          for(let i=0; i< userEmails.length; i++){
+            EmailController.triggerSend(userEmails[i], sub, body);            
+          }
+        });
+       
         res.send({
           message: "Trip was updated successfully.",
         });
