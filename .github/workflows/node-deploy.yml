@@ -47,8 +47,6 @@ jobs:
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.1.1
-        with:
-          node-version: 16
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
           ARGS: "-rltgoDzvO --delete"
