@@ -21,7 +21,7 @@ jobs:
       SENDGRID_API_KEY: ${{secrets.SENDGRID_API_KEY}}
       FRONTEND_URL: "http://ec2-3-137-88-25.us-east-2.compute.amazonaws.com/travel-frontend"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: dev
           node-version: 16
@@ -46,7 +46,7 @@ jobs:
       - run: npm run bundle
 
       - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@v2.1.1
+        uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
           ARGS: "-rltgoDzvO --delete"
